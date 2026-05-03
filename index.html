@@ -455,8 +455,8 @@ function loadVoices(){
     voicesReady = true;
     // Pick best English voice
     cachedVoice =
-      voices.find(v=> v.lang === "en-GB" && v.localService) ||
-      voices.find(v=> v.lang.startsWith("en-GB")) ||
+      voices.find(v=> v.lang === "en-US" && v.localService) ||
+      voices.find(v=> v.lang.startsWith("en-US")) ||
       voices.find(v=> v.lang.startsWith("en") && v.localService) ||
       voices.find(v=> v.lang.startsWith("en")) ||
       null;
@@ -478,7 +478,7 @@ function speak(text, btn){
   // Small delay after cancel to avoid silent playback
   setTimeout(()=>{
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = "en-GB";
+    utter.lang = "en-US";
     utter.rate = 0.8;
     utter.pitch = 1.1;
     utter.volume = 1;
