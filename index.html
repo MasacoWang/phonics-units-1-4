@@ -373,6 +373,7 @@
 
       <div class="top-actions">
         <button class="primary" id="btnHome">🏠 Levels</button>
+        <button id="btnReview">📖 Review</button>
         <button id="btnSave">💾 Save</button>
         <button class="danger" id="btnReset">♻ Reset</button>
       </div>
@@ -402,6 +403,16 @@
 
         <!-- Stages render here -->
         <section class="stage" id="stagePlay"></section>
+
+        <!-- Review page -->
+        <section class="stage" id="stageReview">
+          <h2>📖 Phonics Review — Listen & Learn</h2>
+          <p class="hint">Click 🔊 on any word to hear it. Say it out loud after! Take your time.</p>
+          <div id="reviewContent"></div>
+          <div class="row" style="margin-top:14px;">
+            <button class="primary" id="reviewBackBtn">🏠 Back to Levels</button>
+          </div>
+        </section>
       </main>
 
       <!-- Side panel -->
@@ -697,11 +708,15 @@ const barFill = document.getElementById("barFill");
 const scoreText = document.getElementById("scoreText");
 
 document.getElementById("btnHome").addEventListener("click", showHome);
+document.getElementById("btnReview").addEventListener("click", showReview);
 document.getElementById("btnSave").addEventListener("click", saveState);
 document.getElementById("btnReset").addEventListener("click", resetState);
 
+const stageReview = document.getElementById("stageReview");
+
 function showHome(){
   stagePlay.classList.remove("active");
+  stageReview.classList.remove("active");
   stageHome.classList.add("active");
   unitPill.textContent = "Choose a Level";
   renderHome();
@@ -709,7 +724,121 @@ function showHome(){
 
 function showPlay(){
   stageHome.classList.remove("active");
+  stageReview.classList.remove("active");
   stagePlay.classList.add("active");
+}
+
+function showReview(){
+  stageHome.classList.remove("active");
+  stagePlay.classList.remove("active");
+  stageReview.classList.add("active");
+  unitPill.textContent = "📖 Review";
+  renderReview();
+}
+
+/* ============
+   REVIEW PAGE
+   ============ */
+const phonicsData = [
+  {
+    unit: "Unit 1 — r-controlled vowels",
+    groups: [
+      { sound: "ar", rule: "Makes the 'ah-r' sound (like a pirate: arrr!)", words: ["car","farm","park","star","garden"] },
+      { sound: "ir", rule: "Makes the 'er' sound", words: ["bird","girl","shirt","first","circle"] },
+      { sound: "ur", rule: "Makes the 'er' sound (same as ir!)", words: ["nurse","purple","hurt","turn","burn"] },
+      { sound: "er / or", rule: "At the end of words, makes a soft 'uh' sound", words: ["teacher","sister","doctor","tractor","water"] }
+    ]
+  },
+  {
+    unit: "Unit 2 — diphthongs & short oo",
+    groups: [
+      { sound: "ou", rule: "Makes the 'ow' sound (ouch!)", words: ["mouse","house","cloud","sound","round"] },
+      { sound: "ow", rule: "Also makes the 'ow' sound", words: ["cow","brown","town","down","flower"] },
+      { sound: "oi", rule: "Makes the 'oy' sound (inside words)", words: ["coin","soil","boil","point","noise"] },
+      { sound: "oy", rule: "Makes the 'oy' sound (end of words)", words: ["toy","boy","joy","enjoy","destroy"] },
+      { sound: "oo / u", rule: "Short 'oo' sound (like in 'put')", words: ["book","foot","cook","bush","pull"] }
+    ]
+  },
+  {
+    unit: "Unit 3 — 'aw/or' sounds",
+    groups: [
+      { sound: "au", rule: "Makes the 'aw' sound", words: ["sauce","August","launch","author","dinosaur"] },
+      { sound: "aw", rule: "Also makes the 'aw' sound", words: ["prawn","draw","straw","yawn","crawl"] },
+      { sound: "all", rule: "The 'all' family — 'aw' + l", words: ["ball","tall","wall","fall","small"] },
+      { sound: "wa", rule: "'Wa' changes 'a' to an 'o' sound", words: ["water","walk","watch","want","wash"] },
+      { sound: "or / oar", rule: "Makes the 'or' sound", words: ["horse","fork","roar","board","morning"] }
+    ]
+  },
+  {
+    unit: "Unit 4 — air/ear sounds & tricky ea",
+    groups: [
+      { sound: "air", rule: "Makes the 'air' sound (inside words)", words: ["chair","hair","fair","stairs","repair"] },
+      { sound: "are", rule: "Also makes the 'air' sound", words: ["share","square","care","stare","bare"] },
+      { sound: "ea", rule: "Sometimes short 'e' (not long!)", words: ["bread","head","dead","ready","heavy"] },
+      { sound: "ear / eer", rule: "Makes the 'ear' sound (like listening!)", words: ["ear","clear","deer","cheer","near"] },
+      { sound: "ear (air)", rule: "Tricky! Sometimes 'ear' says 'air'", words: ["bear","pear","wear","tear"] }
+    ]
+  }
+];
+
+function renderReview(){
+  const container = document.getElementById("reviewContent");
+  container.innerHTML = "";
+
+  phonicsData.forEach(unit => {
+    const unitDiv = document.createElement("div");
+    unitDiv.className = "q";
+    unitDiv.style.marginBottom = "14px";
+
+    let html = `<div class="qtitle" style="font-size:15px;margin-bottom:10px;">📚 ${unit.unit}</div>`;
+
+    unit.groups.forEach(group => {
+      html += `<div style="margin:10px 0 6px;"><b style="color:#364fc7;font-size:14px;">${group.sound}</b> <span style="color:#5a6472;font-size:12px;">— ${group.rule}</span></div>`;
+      html += `<div class="chip-row" data-sound-group="${group.sound}"></div>`;
+    });
+
+    unitDiv.innerHTML = html;
+
+    // Add sound buttons for each word
+    unit.groups.forEach(group => {
+      const chipRow = unitDiv.querySelector(`[data-sound-group="${group.sound}"]`);
+      group.words.forEach(word => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.style.display = "inline-flex";
+        chip.style.alignItems = "center";
+        chip.style.gap = "6px";
+        chip.style.padding = "8px 12px";
+
+        const wordSpan = document.createElement("span");
+        wordSpan.textContent = word;
+        wordSpan.style.fontSize = "14px";
+        chip.appendChild(wordSpan);
+
+        const sndBtn = document.createElement("button");
+        sndBtn.className = "sound-btn";
+        sndBtn.style.width = "26px";
+        sndBtn.style.height = "26px";
+        sndBtn.style.fontSize = "13px";
+        sndBtn.textContent = "🔊";
+        sndBtn.title = "Listen: " + word;
+        sndBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          speak(word, sndBtn);
+        });
+        chip.appendChild(sndBtn);
+
+        // Clicking the whole chip also plays sound
+        chip.addEventListener("click", () => speak(word, sndBtn));
+
+        chipRow.appendChild(chip);
+      });
+    });
+
+    container.appendChild(unitDiv);
+  });
+
+  document.getElementById("reviewBackBtn").onclick = showHome;
 }
 
 function updateTopUI(){
