@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phonics Adventure (Units 1–4)</title>
+  <style>
+    :root{
+      --bg1:#fff7f0;
+      --bg2:#f1fbff;
+      --ink:#1b1f2a;
+      --muted:#5a6472;
+      --card:#ffffff;
+      --brand:#ff6b6b;
+      --brand2:#4dabf7;
+      --good:#2fb344;
+      --bad:#fa5252;
+      --warn:#f59f00;
+      --shadow: 0 10px 28px rgba(20, 30, 55, .10);
+      --radius: 18px;
+    }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--ink);
+      background:
+        radial-gradient(1200px 500px at 20% 10%, var(--bg2), transparent),
+        radial-gradient(1200px 600px at 80% 0%, #fff0f6, transparent),
+        linear-gradient(180deg, var(--bg1), #ffffff);
+      min-height:100vh;
+    }
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 20px 16px 80px; }
+    header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      margin: 8px 0 16px;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:46px; height:46px; border-radius:14px;
+      background: linear-gradient(135deg, var(--brand), #ffd43b);
+      display:grid; place-items:center;
+      box-shadow: var(--shadow);
+      font-size: 24px;
+    }
+    h1{ font-size: 20px; margin:0; line-height:1.15; }
+    .sub{ margin:2px 0 0; color:var(--muted); font-size: 13px; }
+    .top-actions{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    button, .btn{
+      border:0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      cursor:pointer;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 14px;
+    }
+    button.primary{
+      background: linear-gradient(135deg, var(--brand2), #845ef7);
+      color:white;
+    }
+    button.danger{
+      background: linear-gradient(135deg, #ff8787, #fa5252);
+      color:white;
+    }
+    button:active{ transform: translateY(1px); }
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      align-items:start;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .big-card{ padding: 18px; }
+    .pill{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f3f6ff;
+      color: #364fc7;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    .progress{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .bar{
+      flex: 1;
+      min-width: 220px;
+      height: 10px;
+      border-radius: 999px;
+      background: #edf2ff;
+      overflow:hidden;
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--good), #82c91e);
+    }
+    .score{
+      font-weight: 900;
+      font-size: 13px;
+      color: #2b2f36;
+    }
+
+    .level-list{
+      display:grid;
+      gap: 10px;
+    }
+    .level{
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 2px solid #f1f3f5;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+      cursor:pointer;
+      transition: .15s ease;
+      user-select:none;
+    }
+    .level:hover{ border-color:#dbe4ff; transform: translateY(-1px); }
+    .lvl-ico{
+      width:40px; height:40px; border-radius: 14px;
+      display:grid; place-items:center;
+      background: #f8f9fa;
+      font-size: 18px;
+      flex: 0 0 auto;
+    }
+    .lvl-title{ font-weight: 900; margin: 0; }
+    .lvl-desc{ margin: 4px 0 0; color: var(--muted); font-size: 13px; line-height:1.35; }
+    .badge{
+      margin-left:auto;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f1f3f5;
+      color:#495057;
+    }
+    .badge.done{ background: #d3f9d8; color:#2b8a3e; }
+    .badge.partial{ background:#fff3bf; color:#a07900; }
+
+    .stage{
+      display:none;
+    }
+    .stage.active{
+      display:block;
+    }
+    .stage h2{
+      margin:0 0 10px;
+      font-size: 18px;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 13px;
+      margin: 0 0 14px;
+      line-height: 1.4;
+    }
+
+    .q{
+      border: 2px solid #f1f3f5;
+      border-radius: 16px;
+      padding: 12px;
+      margin: 10px 0;
+    }
+    .qhead{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom: 8px;
+    }
+    .qtitle{ font-weight: 900; }
+    .status{
+      font-weight: 900;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f1f3f5;
+      color: #495057;
+    }
+    .status.good{ background:#d3f9d8; color:#2b8a3e; }
+    .status.bad{ background:#ffe3e3; color:#c92a2a; }
+    .status.wait{ background:#e7f5ff; color:#1971c2; }
+
+    .choices{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 520px){
+      .choices{ grid-template-columns: 1fr; }
+    }
+    .choice{
+      border: 2px solid #edf2ff;
+      background: #f8faff;
+      border-radius: 16px;
+      padding: 12px;
+      font-weight: 900;
+      font-size: 16px;
+      cursor:pointer;
+      text-align:center;
+      user-select:none;
+    }
+    .choice.selected{
+      border-color: #748ffc;
+      box-shadow: 0 0 0 4px rgba(116,143,252,.15);
+      background: #f3f6ff;
+    }
+    .choice.correct{
+      border-color: var(--good);
+      background: #ebfbee;
+    }
+    .choice.wrong{
+      border-color: var(--bad);
+      background: #fff5f5;
+    }
+
+    .row{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-top: 10px;
+    }
+    input[type="text"], textarea{
+      width: min(460px, 100%);
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 2px solid #e9ecef;
+      font-size: 16px;
+      font-weight: 700;
+      outline:none;
+    }
+    input[type="text"]:focus, textarea:focus{
+      border-color:#748ffc;
+      box-shadow: 0 0 0 4px rgba(116,143,252,.15);
+    }
+    textarea{ min-height: 70px; resize: vertical; }
+
+    .mini{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .toast{
+      display:none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+    .toast.good{ display:block; background:#ebfbee; color:#2b8a3e; border:2px solid #d3f9d8; }
+    .toast.bad{ display:block; background:#fff5f5; color:#c92a2a; border:2px solid #ffe3e3; }
+    .toast.info{ display:block; background:#e7f5ff; color:#1971c2; border:2px solid #d0ebff; }
+
+    /* Sorting (tap-to-place + drag support) */
+    .sort-area{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 700px){
+      .sort-area{ grid-template-columns: 1fr; }
+    }
+    .bucket{
+      border: 2px dashed #ced4da;
+      border-radius: 16px;
+      padding: 12px;
+      min-height: 130px;
+      background: #fcfcff;
+    }
+    .bucket h3{
+      margin: 0 0 10px;
+      font-size: 14px;
+    }
+    .chip-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .chip{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 2px solid #e9ecef;
+      background: #fff;
+      font-weight: 900;
+      cursor:pointer;
+      user-select:none;
+      touch-action: none;
+    }
+    .chip.selected{
+      border-color:#748ffc;
+      box-shadow: 0 0 0 4px rgba(116,143,252,.15);
+    }
+    .chip[draggable="true"]{ cursor:grab; }
+    .bucket.over{ border-color:#748ffc; background:#f3f6ff; }
+    .bucket .chip{ margin: 6px 6px 0 0; }
+
+    /* Sound button */
+    .sound-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #e9ecef;
+      background: linear-gradient(135deg, #fff3bf, #ffd43b);
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      transition: .15s ease;
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .sound-btn:hover{
+      transform: scale(1.12);
+      border-color: #fcc419;
+      box-shadow: 0 4px 14px rgba(252,196,25,.3);
+    }
+    .sound-btn:active{ transform: scale(.95); }
+    .sound-btn.speaking{
+      animation: pulse-sound .6s ease infinite alternate;
+      border-color: #f59f00;
+    }
+    @keyframes pulse-sound{
+      from{ box-shadow: 0 0 0 0 rgba(245,159,0,.3); }
+      to{ box-shadow: 0 0 0 8px rgba(245,159,0,0); }
+    }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">🎮</div>
+        <div>
+          <h1>Phonics Adventure (Units 1–4)</h1>
+          <div class="sub">No timer. Take your time. Say the sound out loud. Then click "Check".</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="primary" id="btnHome">🏠 Levels</button>
+        <button id="btnSave">💾 Save</button>
+        <button class="danger" id="btnReset">♻ Reset</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Main game -->
+      <main class="card big-card">
+        <div class="pill" id="unitPill">Ready</div>
+        <div class="progress">
+          <div class="bar"><div id="barFill"></div></div>
+          <div class="score" id="scoreText">Score: 0</div>
+        </div>
+
+        <!-- Home / Level menu -->
+        <section class="stage active" id="stageHome">
+          <h2>Choose a Level</h2>
+          <p class="hint">
+            ⭐ Tip for parents: let your child read aloud slowly. The game has unlimited retries.
+            Progress is saved on this device when you press Save. 【1-e91846】
+          </p>
+
+          <div class="level-list" id="levelList"></div>
+
+          <footer>Made for phonics practice: Units 1–4 (letter combinations).</footer>
+        </section>
+
+        <!-- Stages render here -->
+        <section class="stage" id="stagePlay"></section>
+      </main>
+
+      <!-- Side panel -->
+      <aside class="card">
+        <h2 style="margin:0 0 8px;font-size:16px;">Phonics Cheat Sheet</h2>
+        <p class="hint" style="margin-bottom:12px;">
+          (You can scroll. No need to memorize. This is a helper.)
+        </p>
+        <div class="q">
+          <div class="qtitle">Unit 1</div>
+          <div class="mini"><b>ar</b>: car, farm, park, star • <b>ir</b>: bird, girl • <b>ur</b>: nurse, purple • <b>er/or</b>: teacher, sister, doctor, tractor</div>
+        </div>
+        <div class="q">
+          <div class="qtitle">Unit 2</div>
+          <div class="mini"><b>ou/ow</b>: mouse, house, cow, brown • <b>oi/oy</b>: coin, soil, toy, boy • <b>oo/u</b>: book, foot, bush, pull</div>
+        </div>
+        <div class="q">
+          <div class="qtitle">Unit 3</div>
+          <div class="mini"><b>au/aw</b>: sauce, August, prawn, draw • <b>all/wa</b>: ball, tall, water, walk • <b>or/oar</b>: horse, fork, roar, board</div>
+        </div>
+        <div class="q">
+          <div class="qtitle">Unit 4</div>
+          <div class="mini"><b>are/air</b>: square, share, chair, hair • <b>ea</b>: bread, head • <b>ear/eer</b>: ear, clear, deer, cheer • <b>bear/pear</b>: bear, pear</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+<script>
+/* ============
+   SPEECH (Text-to-Speech)
+   ============ */
+function speak(text, btn){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = "en-GB";
+  utter.rate = 0.75;   // slow for kids
+  utter.pitch = 1.1;
+
+  // Try to pick a natural English voice
+  const voices = speechSynthesis.getVoices();
+  const preferred = voices.find(v=> v.lang.startsWith("en") && v.name.toLowerCase().includes("female"))
+    || voices.find(v=> v.lang.startsWith("en-GB"))
+    || voices.find(v=> v.lang.startsWith("en"));
+  if(preferred) utter.voice = preferred;
+
+  if(btn){
+    btn.classList.add("speaking");
+    utter.onend = ()=> btn.classList.remove("speaking");
+    utter.onerror = ()=> btn.classList.remove("speaking");
+  }
+  speechSynthesis.speak(utter);
+}
+
+// Preload voices (some browsers load them async)
+if(window.speechSynthesis){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged = ()=> speechSynthesis.getVoices();
+}
+
+// Helper: creates a 🔊 button that speaks the given word
+function makeSoundBtn(word){
+  const btn = document.createElement("button");
+  btn.className = "sound-btn";
+  btn.title = "Listen: " + word;
+  btn.textContent = "🔊";
+  btn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    speak(word, btn);
+  });
+  return btn;
+}
+
+/* ============
+   DATA
+   ============ */
+const STORAGE_KEY = "phonics_adventure_u1_u4_v1";
+
+const levels = [
+  {
+    id: "L1",
+    icon: "🕵️",
+    title: "Sound Detective (Choose the phonics)",
+    desc: "Pick the correct sound group. No timer. Click Check.",
+    type: "mcq",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "c___  → car", choices: ["ar","ir"], answer: "ar", word: "car" },
+      { prompt: "b___d → bird", choices: ["ir","ur"], answer: "ir", word: "bird" },
+      { prompt: "n___se → nurse", choices: ["ur","er"], answer: "ur", word: "nurse" },
+      { prompt: "m___se → mouse", choices: ["ou","ow"], answer: "ou", word: "mouse" },
+      { prompt: "c___n → coin", choices: ["oi","oy"], answer: "oi", word: "coin" },
+      { prompt: "t___y → toy", choices: ["oy","oi"], answer: "oy", word: "toy" },
+      { prompt: "b___k → book", choices: ["oo","u"], answer: "oo", word: "book" },
+      { prompt: "s___ce → sauce", choices: ["au","aw"], answer: "au", word: "sauce" },
+      { prompt: "ch___r → chair", choices: ["air","are"], answer: "air", word: "chair" },
+      { prompt: "ch___r → cheer", choices: ["ear","eer"], answer: "eer", word: "cheer" }
+    ]
+  },
+  {
+    id: "L2",
+    icon: "🧱",
+    title: "Word Builder (Fill the missing letters)",
+    desc: "Type the missing letters to complete each word.",
+    type: "input",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "c__r", answer: "car", hint:"Use 'ar'", word: "car" },
+      { prompt: "f__m", answer: "farm", hint:"Use 'ar'", word: "farm" },
+      { prompt: "b__d", answer: "bird", hint:"Use 'ir'", word: "bird" },
+      { prompt: "n__se", answer: "nurse", hint:"Use 'ur'", word: "nurse" },
+      { prompt: "m__se", answer: "mouse", hint:"Use 'ou'", word: "mouse" },
+      { prompt: "c__w", answer: "cow", hint:"Use 'ow' sound in 'cow'", word: "cow" },
+      { prompt: "c__n", answer: "coin", hint:"Use 'oi'", word: "coin" },
+      { prompt: "b__k", answer: "book", hint:"Use 'oo'", word: "book" },
+      { prompt: "w__ter", answer: "water", hint:"Use 'wa'", word: "water" },
+      { prompt: "br__d", answer: "bread", hint:"Use 'ea'", word: "bread" }
+    ]
+  },
+  {
+    id: "L3",
+    icon: "🔤",
+    title: "Mix & Fix (Unscramble)",
+    desc: "Reorder letters to make the word.",
+    type: "unscramble",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "rca", answer: "car" },
+      { prompt: "mfra", answer: "farm" },
+      { prompt: "krpa", answer: "park" },
+      { prompt: "drib", answer: "bird" },
+      { prompt: "esoum", answer: "mouse" },
+      { prompt: "hsuoe", answer: "house" },
+      { prompt: "noci", answer: "coin" },
+      { prompt: "kobo", answer: "book" },
+      { prompt: "llab", answer: "ball" },
+      { prompt: "riahc", answer: "chair" }
+    ]
+  },
+  {
+    id: "L4",
+    icon: "📦",
+    title: "Sort & Sound (Tap-to-place / Drag)",
+    desc: "Tap a word, then tap the correct bucket. (Drag also works.)",
+    type: "sort",
+    pointsPerQ: 8,
+    rounds: [
+      {
+        title: "Unit 2: ou vs ow",
+        buckets: ["ou","ow"],
+        items: [
+          { word:"mouse", bucket:"ou" },
+          { word:"house", bucket:"ou" },
+          { word:"cow", bucket:"ow" },
+          { word:"brown", bucket:"ow" }
+        ]
+      },
+      {
+        title: "Unit 3: au vs aw",
+        buckets: ["au","aw"],
+        items: [
+          { word:"August", bucket:"au" },
+          { word:"sauce", bucket:"au" },
+          { word:"draw", bucket:"aw" },
+          { word:"prawn", bucket:"aw" }
+        ]
+      },
+      {
+        title: "Unit 4: air vs are",
+        buckets: ["air","are"],
+        items: [
+          { word:"chair", bucket:"air" },
+          { word:"hair", bucket:"air" },
+          { word:"share", bucket:"are" },
+          { word:"square", bucket:"are" }
+        ]
+      },
+      {
+        title: "Unit 4: ea vs ear/eer",
+        buckets: ["ea","ear/eer"],
+        items: [
+          { word:"bread", bucket:"ea" },
+          { word:"head", bucket:"ea" },
+          { word:"clear", bucket:"ear/eer" },
+          { word:"cheer", bucket:"ear/eer" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "L5",
+    icon: "🎯",
+    title: "Tricky Twins (Choose the correct word)",
+    desc: "Pick the correct word. Listen carefully.",
+    type: "mcq",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "🐻  (bear / beer)", choices:["bear","beer"], answer:"bear", word:"bear" },
+      { prompt: "🚶  (walk / work)", choices:["walk","work"], answer:"walk", word:"walk" },
+      { prompt: "🍐  (pear / pair)", choices:["pear","pair"], answer:"pear", word:"pear" },
+      { prompt: "🪑  (chair / cheer)", choices:["chair","cheer"], answer:"chair", word:"chair" },
+      { prompt: "🦌  (deer / dear)", choices:["deer","dear"], answer:"deer", word:"deer" }
+    ]
+  },
+  {
+    id: "L6",
+    icon: "✍️",
+    title: "Sentence Studio (Create your own!)",
+    desc: "Write a sentence. We check for the keyword only (easy!).",
+    type: "sentence",
+    pointsPerQ: 2,
+    questions: [
+      { prompt: "Write a sentence with: car", keyword: "car" },
+      { prompt: "Write a sentence with: mouse", keyword: "mouse" },
+      { prompt: "Write a sentence with: chair", keyword: "chair" },
+      { prompt: "Write a sentence with: bread", keyword: "bread" }
+    ]
+  }
+];
+
+/* ============
+   STATE
+   ============ */
+let state = loadState() || {
+  score: 0,
+  done: {},        // levelId -> {status:"done"/"partial", earned:number, total:number}
+  lastLevel: null
+};
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  toast("Saved ✅", "info");
+  renderHome();
+  updateTopUI();
+}
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  }catch(e){ return null; }
+}
+function resetState(){
+  if(!confirm("Reset all progress?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = { score:0, done:{}, lastLevel:null };
+  showHome();
+  updateTopUI();
+}
+
+function addScore(points){
+  state.score += points;
+  updateTopUI();
+}
+
+function levelStatus(levelId){
+  return state.done[levelId] || null;
+}
+
+/* ============
+   UI HELPERS
+   ============ */
+const stageHome = document.getElementById("stageHome");
+const stagePlay = document.getElementById("stagePlay");
+const levelList = document.getElementById("levelList");
+const unitPill = document.getElementById("unitPill");
+const barFill = document.getElementById("barFill");
+const scoreText = document.getElementById("scoreText");
+
+document.getElementById("btnHome").addEventListener("click", showHome);
+document.getElementById("btnSave").addEventListener("click", saveState);
+document.getElementById("btnReset").addEventListener("click", resetState);
+
+function showHome(){
+  stagePlay.classList.remove("active");
+  stageHome.classList.add("active");
+  unitPill.textContent = "Choose a Level";
+  renderHome();
+}
+
+function showPlay(){
+  stageHome.classList.remove("active");
+  stagePlay.classList.add("active");
+}
+
+function updateTopUI(){
+  scoreText.textContent = `Score: ${state.score}`;
+  const totalPossible = levels.reduce((sum,lvl)=>{
+    if(lvl.type==="sort") return sum + (lvl.rounds.length * lvl.pointsPerQ);
+    return sum + (lvl.questions.length * lvl.pointsPerQ);
+  },0);
+  const pct = Math.max(0, Math.min(100, Math.round((state.score / totalPossible) * 100)));
+  barFill.style.width = pct + "%";
+}
+
+function renderHome(){
+  levelList.innerHTML = "";
+  levels.forEach(lvl=>{
+    const st = levelStatus(lvl.id);
+    const badgeText = st ? (st.status==="done" ? "Done ✅" : "In progress ⭐") : "Start ▶";
+    const badgeClass = st ? (st.status==="done" ? "badge done" : "badge partial") : "badge";
+    const row = document.createElement("div");
+    row.className = "level";
+    row.innerHTML = `
+      <div class="lvl-ico">${lvl.icon}</div>
+      <div style="min-width:0">
+        <div class="lvl-title">${lvl.title}</div>
+        <div class="lvl-desc">${lvl.desc}</div>
+      </div>
+      <div class="${badgeClass}">${badgeText}</div>
+    `;
+    row.addEventListener("click", ()=>startLevel(lvl.id));
+    levelList.appendChild(row);
+  });
+}
+
+/* ============
+   TOAST
+   ============ */
+let toastTimer = null;
+function toast(msg, type="info"){
+  clearTimeout(toastTimer);
+  let el = document.getElementById("globalToast");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "globalToast";
+    el.className = "toast info";
+    stageHome.appendChild(el);
+  }
+  el.className = "toast " + type;
+  el.textContent = msg;
+  toastTimer = setTimeout(()=>{ el.className="toast"; }, 1600);
+}
+
+/* ============
+   LEVEL ENGINE
+   ============ */
+function startLevel(levelId){
+  const lvl = levels.find(x=>x.id===levelId);
+  if(!lvl) return;
+  state.lastLevel = levelId;
+
+  stagePlay.innerHTML = "";
+  showPlay();
+  unitPill.textContent = `${lvl.icon} ${lvl.title}`;
+
+  if(lvl.type === "mcq") renderMCQ(lvl);
+  if(lvl.type === "input") renderInput(lvl);
+  if(lvl.type === "unscramble") renderUnscramble(lvl);
+  if(lvl.type === "sort") renderSort(lvl);
+  if(lvl.type === "sentence") renderSentence(lvl);
+
+  updateTopUI();
+}
+
+function finishLevel(levelId, earned, total){
+  const status = earned === total ? "done" : "partial";
+  state.done[levelId] = { status, earned, total };
+  saveState();
+  stagePlay.insertAdjacentHTML("beforeend", `
+    <div class="toast ${status==='done'?'good':'info'}">
+      ${status==='done' ? 'Level Complete! 🎉 Great job!' : 'Nice work! ⭐ You can retry anytime.'}
+      (Earned ${earned}/${total})
+    </div>
+  `);
+}
+
+/* ============
+   MCQ
+   ============ */
+function renderMCQ(lvl){
+  const total = lvl.questions.length * lvl.pointsPerQ;
+  let earned = 0;
+
+  const header = document.createElement("div");
+  header.innerHTML = `
+    <h2>${lvl.title}</h2>
+    <p class="hint">Choose an answer, then click <b>Check</b>. Unlimited retries. No timer.<br/>
+    🔊 Click the speaker to hear the word!</p>
+  `;
+  stagePlay.appendChild(header);
+
+  lvl.questions.forEach((q, idx)=>{
+    const qWrap = document.createElement("div");
+    qWrap.className = "q";
+    qWrap.dataset.answered = "0";
+    qWrap.dataset.correct = "0";
+
+    qWrap.innerHTML = `
+      <div class="qhead">
+        <div class="qtitle" style="display:flex;align-items:center;gap:8px;">
+          <span>${idx+1}. ${q.prompt}</span>
+        </div>
+        <div class="status wait">Not checked</div>
+      </div>
+      <div class="choices"></div>
+      <div class="row">
+        <button class="primary">✅ Check</button>
+        <button>💡 Hint</button>
+      </div>
+      <div class="toast"></div>
+    `;
+
+    // Insert sound button next to the question title
+    const titleEl = qWrap.querySelector(".qtitle");
+    const wordToSpeak = q.word || q.answer || "";
+    if(wordToSpeak){
+      titleEl.appendChild(makeSoundBtn(wordToSpeak));
+    }
+
+    const choicesEl = qWrap.querySelector(".choices");
+    let selected = null;
+
+    q.choices.forEach(ch=>{
+      const btn = document.createElement("div");
+      btn.className = "choice";
+      btn.textContent = ch;
+      btn.addEventListener("click", ()=>{
+        selected = ch;
+        [...choicesEl.children].forEach(x=>x.classList.remove("selected"));
+        btn.classList.add("selected");
+      });
+      choicesEl.appendChild(btn);
+    });
+
+    const checkBtn = qWrap.querySelector("button.primary");
+    const hintBtn = qWrap.querySelectorAll("button")[1];
+    const statusEl = qWrap.querySelector(".status");
+    const toastEl = qWrap.querySelector(".toast");
+
+    hintBtn.addEventListener("click", ()=>{
+      toastEl.className = "toast info";
+      toastEl.textContent = "Say the word out loud slowly. Listen for the vowel sound!";
+    });
+
+    checkBtn.addEventListener("click", ()=>{
+      if(!selected){
+        toastEl.className = "toast info";
+        toastEl.textContent = "Pick an answer first 🙂";
+        return;
+      }
+      if(qWrap.dataset.correct === "1"){
+        toastEl.className = "toast info";
+        toastEl.textContent = "Already correct ✅";
+        return;
+      }
+
+      const isCorrect = selected === q.answer;
+      const choiceBtns = [...choicesEl.children];
+      choiceBtns.forEach(b=>{
+        b.classList.remove("wrong","correct");
+        if(b.textContent===q.answer) b.classList.add("correct");
+        if(b.textContent===selected && !isCorrect) b.classList.add("wrong");
+      });
+
+      if(isCorrect){
+        qWrap.dataset.correct = "1";
+        statusEl.className = "status good";
+        statusEl.textContent = "Correct ✅";
+        toastEl.className = "toast good";
+        toastEl.textContent = "Great! ⭐";
+        earned += lvl.pointsPerQ;
+        addScore(lvl.pointsPerQ);
+      }else{
+        statusEl.className = "status bad";
+        statusEl.textContent = "Try again";
+        toastEl.className = "toast bad";
+        toastEl.textContent = "Almost! Read it again and try.";
+      }
+      const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+      if(correctCount === lvl.questions.length){
+        finishLevel(lvl.id, earned, total);
+      }
+    });
+
+    stagePlay.appendChild(qWrap);
+  });
+
+  stagePlay.insertAdjacentHTML("beforeend", `<div class="row" style="justify-content:space-between;margin-top:14px;">
+    <button id="backBtn">⬅ Back</button>
+    <button class="primary" id="finishBtn">🏁 Finish Level</button>
+  </div>`);
+
+  document.getElementById("backBtn").onclick = showHome;
+  document.getElementById("finishBtn").onclick = ()=>{
+    const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+    const earnedNow = correctCount * lvl.pointsPerQ;
+    finishLevel(lvl.id, earnedNow, total);
+  };
+}
+
+/* ============
+   INPUT
+   ============ */
+function renderInput(lvl){
+  const total = lvl.questions.length * lvl.pointsPerQ;
+  let earned = 0;
+
+  stagePlay.insertAdjacentHTML("beforeend", `
+    <h2>${lvl.title}</h2>
+    <p class="hint">Type the full word (example: <b>car</b>). Click <b>Check</b>. Unlimited retries.<br/>
+    🔊 Click the speaker to hear the word!</p>
+  `);
+
+  lvl.questions.forEach((q, idx)=>{
+    const qWrap = document.createElement("div");
+    qWrap.className = "q";
+    qWrap.dataset.correct = "0";
+    qWrap.innerHTML = `
+      <div class="qhead">
+        <div class="qtitle" style="display:flex;align-items:center;gap:8px;">
+          <span>${idx+1}. ${q.prompt}</span>
+        </div>
+        <div class="status wait">Not checked</div>
+      </div>
+      <div class="row">
+        <input type="text" placeholder="Type the word..." autocomplete="off" />
+        <button class="primary">✅ Check</button>
+        <button>💡 Hint</button>
+      </div>
+      <div class="mini">Tip: say the sound before typing.</div>
+      <div class="toast"></div>
+    `;
+
+    // Insert sound button
+    const titleEl = qWrap.querySelector(".qtitle");
+    const wordToSpeak = q.word || q.answer;
+    titleEl.appendChild(makeSoundBtn(wordToSpeak));
+
+    const input = qWrap.querySelector("input");
+    const checkBtn = qWrap.querySelector("button.primary");
+    const hintBtn = qWrap.querySelectorAll("button")[1];
+    const statusEl = qWrap.querySelector(".status");
+    const toastEl = qWrap.querySelector(".toast");
+
+    hintBtn.addEventListener("click", ()=>{
+      toastEl.className = "toast info";
+      toastEl.textContent = q.hint || "Try sounding it out slowly.";
+    });
+
+    checkBtn.addEventListener("click", ()=>{
+      if(qWrap.dataset.correct==="1"){
+        toastEl.className = "toast info";
+        toastEl.textContent = "Already correct ✅";
+        return;
+      }
+      const val = (input.value || "").trim().toLowerCase();
+      const ans = q.answer.toLowerCase();
+      if(!val){
+        toastEl.className = "toast info";
+        toastEl.textContent = "Type your answer 🙂";
+        return;
+      }
+      if(val === ans){
+        qWrap.dataset.correct="1";
+        statusEl.className = "status good";
+        statusEl.textContent = "Correct ✅";
+        toastEl.className = "toast good";
+        toastEl.textContent = "Nice! ⭐";
+        earned += lvl.pointsPerQ;
+        addScore(lvl.pointsPerQ);
+      }else{
+        statusEl.className = "status bad";
+        statusEl.textContent = "Try again";
+        toastEl.className = "toast bad";
+        toastEl.textContent = "Not yet — say it slowly and try again.";
+      }
+
+      const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+      if(correctCount === lvl.questions.length){
+        finishLevel(lvl.id, earned, total);
+      }
+    });
+
+    stagePlay.appendChild(qWrap);
+  });
+
+  stagePlay.insertAdjacentHTML("beforeend", `<div class="row" style="justify-content:space-between;margin-top:14px;">
+    <button id="backBtn">⬅ Back</button>
+    <button class="primary" id="finishBtn">🏁 Finish Level</button>
+  </div>`);
+  document.getElementById("backBtn").onclick = showHome;
+  document.getElementById("finishBtn").onclick = ()=>{
+    const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+    finishLevel(lvl.id, correctCount*lvl.pointsPerQ, total);
+  };
+}
+
+/* ============
+   UNSCRAMBLE
+   ============ */
+function renderUnscramble(lvl){
+  const total = lvl.questions.length * lvl.pointsPerQ;
+  let earned = 0;
+
+  stagePlay.insertAdjacentHTML("beforeend", `
+    <h2>${lvl.title}</h2>
+    <p class="hint">Unscramble the letters. Type the word. Click <b>Check</b>. No time limit.<br/>
+    🔊 Click the speaker to hear the word (after you answer correctly)!</p>
+  `);
+
+  lvl.questions.forEach((q, idx)=>{
+    const qWrap = document.createElement("div");
+    qWrap.className = "q";
+    qWrap.dataset.correct="0";
+    qWrap.innerHTML = `
+      <div class="qhead">
+        <div class="qtitle" style="display:flex;align-items:center;gap:8px;">
+          <span>${idx+1}. ${q.prompt}</span>
+        </div>
+        <div class="status wait">Not checked</div>
+      </div>
+      <div class="row">
+        <input type="text" placeholder="Type the word..." autocomplete="off" />
+        <button class="primary">✅ Check</button>
+        <button>🔁 Shuffle</button>
+      </div>
+      <div class="toast"></div>
+    `;
+    const input = qWrap.querySelector("input");
+    const checkBtn = qWrap.querySelector("button.primary");
+    const shuffleBtn = qWrap.querySelectorAll("button")[1];
+    const statusEl = qWrap.querySelector(".status");
+    const toastEl = qWrap.querySelector(".toast");
+    const titleEl = qWrap.querySelector(".qtitle");
+    const titleSpan = titleEl.querySelector("span");
+
+    shuffleBtn.addEventListener("click", ()=>{
+      const chars = q.prompt.split("");
+      for(let i=chars.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [chars[i],chars[j]] = [chars[j],chars[i]];
+      }
+      titleSpan.textContent = `${idx+1}. ${chars.join("")}`;
+      toastEl.className = "toast info";
+      toastEl.textContent = "Shuffled! Try again 🙂";
+    });
+
+    checkBtn.addEventListener("click", ()=>{
+      if(qWrap.dataset.correct==="1"){
+        toastEl.className="toast info";
+        toastEl.textContent="Already correct ✅";
+        return;
+      }
+      const val = (input.value||"").trim().toLowerCase();
+      if(!val){
+        toastEl.className="toast info";
+        toastEl.textContent="Type your answer 🙂";
+        return;
+      }
+      if(val === q.answer.toLowerCase()){
+        qWrap.dataset.correct="1";
+        statusEl.className="status good";
+        statusEl.textContent="Correct ✅";
+        toastEl.className="toast good";
+        toastEl.textContent="Great! ⭐";
+        earned += lvl.pointsPerQ;
+        addScore(lvl.pointsPerQ);
+        // Reveal the sound button after correct answer
+        titleEl.appendChild(makeSoundBtn(q.answer));
+        speak(q.answer); // auto-play the word once
+      }else{
+        statusEl.className="status bad";
+        statusEl.textContent="Try again";
+        toastEl.className="toast bad";
+        toastEl.textContent="Close! Say the word out loud and try.";
+      }
+
+      const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+      if(correctCount === lvl.questions.length){
+        finishLevel(lvl.id, earned, total);
+      }
+    });
+
+    stagePlay.appendChild(qWrap);
+  });
+
+  stagePlay.insertAdjacentHTML("beforeend", `<div class="row" style="justify-content:space-between;margin-top:14px;">
+    <button id="backBtn">⬅ Back</button>
+    <button class="primary" id="finishBtn">🏁 Finish Level</button>
+  </div>`);
+  document.getElementById("backBtn").onclick = showHome;
+  document.getElementById("finishBtn").onclick = ()=>{
+    const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+    finishLevel(lvl.id, correctCount*lvl.pointsPerQ, total);
+  };
+}
+
+/* ============
+   SORT (tap-to-place + drag)
+   ============ */
+function renderSort(lvl){
+  const total = lvl.rounds.length * lvl.pointsPerQ;
+  let earned = 0;
+  let roundIndex = 0;
+
+  const container = document.createElement("div");
+  stagePlay.appendChild(container);
+
+  function renderRound(){
+    const round = lvl.rounds[roundIndex];
+    container.innerHTML = `
+      <h2>${lvl.title}</h2>
+      <p class="hint">
+        Round ${roundIndex+1}/${lvl.rounds.length}: <b>${round.title}</b><br/>
+        ✅ How to play: Tap a word → then tap the correct bucket. (Drag also works.)<br/>
+        🔊 Click the speaker on each word to hear it!
+      </p>
+
+      <div class="q">
+        <div class="qhead">
+          <div class="qtitle">Place all words in the correct bucket</div>
+          <div class="status wait" id="roundStatus">Not checked</div>
+        </div>
+
+        <div class="sort-area" id="sortArea"></div>
+
+        <div class="row" style="margin-top:12px;">
+          <button class="primary" id="checkSort">✅ Check Round</button>
+          <button id="resetSort">↩ Reset Round</button>
+          <button id="hintSort">💡 Hint</button>
+        </div>
+        <div class="toast" id="sortToast"></div>
+      </div>
+
+      <div class="row" style="justify-content:space-between;margin-top:12px;">
+        <button id="backBtn">⬅ Back</button>
+        <button class="primary" id="nextBtn">${roundIndex === lvl.rounds.length-1 ? "🏁 Finish Level" : "Next Round ▶"}</button>
+      </div>
+    `;
+
+    document.getElementById("backBtn").onclick = showHome;
+
+    const sortArea = document.getElementById("sortArea");
+    const statusEl = document.getElementById("roundStatus");
+    const toastEl = document.getElementById("sortToast");
+
+    let selectedChipId = null;
+
+    const buckets = {};
+    round.buckets.forEach(b=>{
+      const bucket = document.createElement("div");
+      bucket.className = "bucket";
+      bucket.dataset.bucket = b;
+      bucket.innerHTML = `<h3>Bucket: <b>${b}</b></h3><div class="bucketBody"></div>`;
+      const body = bucket.querySelector(".bucketBody");
+
+      bucket.addEventListener("click", ()=>{
+        if(!selectedChipId) return;
+        const chip = document.getElementById(selectedChipId);
+        if(!chip) return;
+        body.appendChild(chip);
+        chip.classList.remove("selected");
+        selectedChipId = null;
+      });
+
+      bucket.addEventListener("dragover", (e)=>{ e.preventDefault(); bucket.classList.add("over"); });
+      bucket.addEventListener("dragleave", ()=> bucket.classList.remove("over"));
+      bucket.addEventListener("drop", (e)=>{
+        e.preventDefault();
+        bucket.classList.remove("over");
+        const id = e.dataTransfer.getData("text/plain");
+        const chip = document.getElementById(id);
+        if(chip) body.appendChild(chip);
+      });
+
+      sortArea.appendChild(bucket);
+      buckets[b] = body;
+    });
+
+    const bank = document.createElement("div");
+    bank.className = "bucket";
+    bank.style.borderStyle = "solid";
+    bank.style.background = "#fff";
+    bank.innerHTML = `<h3>Word Bank</h3><div class="chip-row" id="chipRow"></div>`;
+    const chipRow = bank.querySelector("#chipRow");
+    sortArea.prepend(bank);
+
+    round.items.forEach((it, i)=>{
+      const chip = document.createElement("div");
+      chip.className = "chip";
+      chip.id = `chip_${lvl.id}_${roundIndex}_${i}`;
+      chip.setAttribute("draggable","true");
+      chip.dataset.correctBucket = it.bucket;
+      chip.style.display = "inline-flex";
+      chip.style.alignItems = "center";
+      chip.style.gap = "6px";
+
+      // Word text
+      const wordSpan = document.createElement("span");
+      wordSpan.textContent = it.word;
+      chip.appendChild(wordSpan);
+
+      // Mini sound button on the chip
+      const miniSnd = document.createElement("button");
+      miniSnd.className = "sound-btn";
+      miniSnd.style.width = "28px";
+      miniSnd.style.height = "28px";
+      miniSnd.style.fontSize = "14px";
+      miniSnd.textContent = "🔊";
+      miniSnd.title = "Listen: " + it.word;
+      miniSnd.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        speak(it.word, miniSnd);
+      });
+      chip.appendChild(miniSnd);
+
+      chip.addEventListener("click", (e)=>{
+        if(e.target === miniSnd) return;
+        e.stopPropagation();
+        const wasSelected = chip.classList.contains("selected");
+        document.querySelectorAll(".chip.selected").forEach(x=>x.classList.remove("selected"));
+        if(!wasSelected){
+          chip.classList.add("selected");
+          selectedChipId = chip.id;
+        }else{
+          selectedChipId = null;
+        }
+      });
+
+      chip.addEventListener("dragstart", (e)=>{
+        e.dataTransfer.setData("text/plain", chip.id);
+      });
+
+      chipRow.appendChild(chip);
+    });
+
+    document.getElementById("hintSort").onclick = ()=>{
+      toastEl.className = "toast info";
+      toastEl.textContent = "Say the word out loud. Which sound group does it match?";
+    };
+
+    document.getElementById("resetSort").onclick = ()=>{
+      round.items.forEach((it,i)=>{
+        const chip = document.getElementById(`chip_${lvl.id}_${roundIndex}_${i}`);
+        if(chip) chipRow.appendChild(chip);
+        chip?.classList.remove("selected");
+      });
+      selectedChipId = null;
+      statusEl.className = "status wait";
+      statusEl.textContent = "Not checked";
+      toastEl.className = "toast info";
+      toastEl.textContent = "Round reset 🙂";
+    };
+
+    document.getElementById("checkSort").onclick = ()=>{
+      const allChips = round.items.map((_,i)=>document.getElementById(`chip_${lvl.id}_${roundIndex}_${i}`));
+      const unplaced = allChips.filter(ch=>ch && ch.parentElement === chipRow);
+      if(unplaced.length){
+        toastEl.className = "toast info";
+        toastEl.textContent = "Move ALL words into buckets first 🙂";
+        return;
+      }
+      let ok = true;
+      allChips.forEach(ch=>{
+        if(!ch) return;
+        const parentBucket = ch.closest(".bucket")?.dataset?.bucket;
+        const correct = ch.dataset.correctBucket;
+        if(parentBucket !== correct) ok = false;
+      });
+
+      if(ok){
+        statusEl.className = "status good";
+        statusEl.textContent = "Correct ✅";
+        toastEl.className = "toast good";
+        toastEl.textContent = "Perfect sorting! ⭐";
+        if(!round._scored){
+          round._scored = true;
+          earned += lvl.pointsPerQ;
+          addScore(lvl.pointsPerQ);
+        }
+      }else{
+        statusEl.className = "status bad";
+        statusEl.textContent = "Try again";
+        toastEl.className = "toast bad";
+        toastEl.textContent = "Some words are in the wrong bucket. Reset or move and check again.";
+      }
+    };
+
+    document.getElementById("nextBtn").onclick = ()=>{
+      if(roundIndex < lvl.rounds.length-1){
+        roundIndex++;
+        renderRound();
+      }else{
+        finishLevel(lvl.id, earned, total);
+      }
+    };
+  }
+
+  renderRound();
+}
+
+/* ============
+   SENTENCE
+   ============ */
+function renderSentence(lvl){
+  const total = lvl.questions.length * lvl.pointsPerQ;
+  let earned = 0;
+
+  stagePlay.insertAdjacentHTML("beforeend", `
+    <h2>${lvl.title}</h2>
+    <p class="hint">Write a sentence. We only check if the keyword is included (easy!). No timer.<br/>
+    🔊 Click the speaker to hear the keyword!</p>
+  `);
+
+  lvl.questions.forEach((q, idx)=>{
+    const qWrap = document.createElement("div");
+    qWrap.className = "q";
+    qWrap.dataset.correct="0";
+    qWrap.innerHTML = `
+      <div class="qhead">
+        <div class="qtitle" style="display:flex;align-items:center;gap:8px;">
+          <span>${idx+1}. ${q.prompt}</span>
+        </div>
+        <div class="status wait">Not checked</div>
+      </div>
+      <textarea placeholder="Type your sentence here..."></textarea>
+      <div class="row">
+        <button class="primary">✅ Check</button>
+        <button>💡 Example</button>
+      </div>
+      <div class="toast"></div>
+    `;
+
+    // Insert sound button for the keyword
+    const titleEl = qWrap.querySelector(".qtitle");
+    titleEl.appendChild(makeSoundBtn(q.keyword));
+
+    const ta = qWrap.querySelector("textarea");
+    const checkBtn = qWrap.querySelector("button.primary");
+    const exBtn = qWrap.querySelectorAll("button")[1];
+    const statusEl = qWrap.querySelector(".status");
+    const toastEl = qWrap.querySelector(".toast");
+
+    exBtn.addEventListener("click", ()=>{
+      toastEl.className = "toast info";
+      toastEl.textContent = `Example: "I see a ${q.keyword}." (You can write your own!)`;
+    });
+
+    checkBtn.addEventListener("click", ()=>{
+      if(qWrap.dataset.correct==="1"){
+        toastEl.className="toast info";
+        toastEl.textContent="Already correct ✅";
+        return;
+      }
+      const txt = (ta.value||"").toLowerCase();
+      if(!txt.trim()){
+        toastEl.className="toast info";
+        toastEl.textContent="Write a sentence 🙂";
+        return;
+      }
+      if(txt.includes(q.keyword.toLowerCase())){
+        qWrap.dataset.correct="1";
+        statusEl.className="status good";
+        statusEl.textContent="Correct ✅";
+        toastEl.className="toast good";
+        toastEl.textContent="Nice sentence! ⭐";
+        earned += lvl.pointsPerQ;
+        addScore(lvl.pointsPerQ);
+      }else{
+        statusEl.className="status bad";
+        statusEl.textContent="Try again";
+        toastEl.className="toast bad";
+        toastEl.textContent=`Make sure your sentence includes the word: "${q.keyword}".`;
+      }
+
+      const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+      if(correctCount === lvl.questions.length){
+        finishLevel(lvl.id, earned, total);
+      }
+    });
+
+    stagePlay.appendChild(qWrap);
+  });
+
+  stagePlay.insertAdjacentHTML("beforeend", `<div class="row" style="justify-content:space-between;margin-top:14px;">
+    <button id="backBtn">⬅ Back</button>
+    <button class="primary" id="finishBtn">🏁 Finish Level</button>
+  </div>`);
+  document.getElementById("backBtn").onclick = showHome;
+  document.getElementById("finishBtn").onclick = ()=>{
+    const correctCount = stagePlay.querySelectorAll('.q[data-correct="1"]').length;
+    finishLevel(lvl.id, correctCount*lvl.pointsPerQ, total);
+  };
+}
+
+/* ============
+   INIT
+   ============ */
+renderHome();
+updateTopUI();
+</script>
+</body>
+</html>
