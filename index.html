@@ -518,76 +518,125 @@ function makeSoundBtn(word){
 const STORAGE_KEY = "phonics_adventure_u1_u4_v1";
 
 const levels = [
+  // === UNIT 1: ar, ir, ur, er/or ===
   {
-    id: "L1",
+    id: "U1-mcq",
     icon: "🕵️",
-    title: "Sound Detective (Choose the phonics)",
-    desc: "Pick the correct sound group. No timer. Click Check.",
+    title: "Unit 1: Sound Detective",
+    desc: "ar, ir, ur, er/or — Pick the correct sound.",
     type: "mcq",
     pointsPerQ: 1,
     questions: [
-      { prompt: "c___  → car", choices: ["ar","ir"], answer: "ar", word: "car" },
-      { prompt: "b___d → bird", choices: ["ir","ur"], answer: "ir", word: "bird" },
-      { prompt: "n___se → nurse", choices: ["ur","er"], answer: "ur", word: "nurse" },
-      { prompt: "m___se → mouse", choices: ["ou","ow"], answer: "ou", word: "mouse" },
-      { prompt: "c___n → coin", choices: ["oi","oy"], answer: "oi", word: "coin" },
-      { prompt: "t__ → toy", choices: ["oy","oi"], answer: "oy", word: "toy" },
-      { prompt: "b___k → book", choices: ["oo","u"], answer: "oo", word: "book" },
-      { prompt: "s___ce → sauce", choices: ["au","aw"], answer: "au", word: "sauce" },
-      { prompt: "ch___r → chair", choices: ["air","are"], answer: "air", word: "chair" },
-      { prompt: "ch___r → cheer", choices: ["ear","eer"], answer: "eer", word: "cheer" }
+      { prompt: "c__ → car", choices: ["ar","ir"], answer: "ar", word: "car" },
+      { prompt: "f__m → farm", choices: ["ar","ur"], answer: "ar", word: "farm" },
+      { prompt: "p__k → park", choices: ["ar","er"], answer: "ar", word: "park" },
+      { prompt: "b__d → bird", choices: ["ir","ur"], answer: "ir", word: "bird" },
+      { prompt: "g__l → girl", choices: ["ir","ar"], answer: "ir", word: "girl" },
+      { prompt: "n__se → nurse", choices: ["ur","ir"], answer: "ur", word: "nurse" },
+      { prompt: "p__ple → purple", choices: ["ur","ar"], answer: "ur", word: "purple" },
+      { prompt: "teach__ → teacher", choices: ["er","ar"], answer: "er", word: "teacher" },
+      { prompt: "doct__ → doctor", choices: ["or","ar"], answer: "or", word: "doctor" },
+      { prompt: "sist__ → sister", choices: ["er","ir"], answer: "er", word: "sister" }
     ]
   },
   {
-    id: "L2",
+    id: "U1-spell",
     icon: "🧱",
-    title: "Word Builder (Fill the missing letters)",
-    desc: "Type the missing letters to complete each word.",
+    title: "Unit 1: Word Builder",
+    desc: "ar, ir, ur, er/or — Type the full word.",
     type: "input",
     pointsPerQ: 1,
     questions: [
-      { prompt: "c__r", answer: "car", hint:"Use 'ar'", word: "car" },
-      { prompt: "f__m", answer: "farm", hint:"Use 'ar'", word: "farm" },
-      { prompt: "b__d", answer: "bird", hint:"Use 'ir'", word: "bird" },
-      { prompt: "n__se", answer: "nurse", hint:"Use 'ur'", word: "nurse" },
-      { prompt: "m__se", answer: "mouse", hint:"Use 'ou'", word: "mouse" },
-      { prompt: "c__w", answer: "cow", hint:"Use 'ow' sound in 'cow'", word: "cow" },
-      { prompt: "c__n", answer: "coin", hint:"Use 'oi'", word: "coin" },
-      { prompt: "b__k", answer: "book", hint:"Use 'oo'", word: "book" },
-      { prompt: "w__ter", answer: "water", hint:"Use 'wa'", word: "water" },
-      { prompt: "br__d", answer: "bread", hint:"Use 'ea'", word: "bread" }
+      { prompt: "c__", answer: "car", hint: "Use 'ar'", word: "car" },
+      { prompt: "st__", answer: "star", hint: "Use 'ar'", word: "star" },
+      { prompt: "f__m", answer: "farm", hint: "Use 'ar'", word: "farm" },
+      { prompt: "b__d", answer: "bird", hint: "Use 'ir'", word: "bird" },
+      { prompt: "sh__t", answer: "shirt", hint: "Use 'ir'", word: "shirt" },
+      { prompt: "n__se", answer: "nurse", hint: "Use 'ur'", word: "nurse" },
+      { prompt: "t__n", answer: "turn", hint: "Use 'ur'", word: "turn" },
+      { prompt: "teach__", answer: "teacher", hint: "Use 'er'", word: "teacher" }
     ]
   },
   {
-    id: "L3",
-    icon: "🔤",
-    title: "Mix & Fix (Unscramble)",
-    desc: "Reorder letters to make the word.",
-    type: "unscramble",
-    pointsPerQ: 1,
-    questions: [
-      { prompt: "rca", answer: "car" },
-      { prompt: "mfra", answer: "farm" },
-      { prompt: "krpa", answer: "park" },
-      { prompt: "drib", answer: "bird" },
-      { prompt: "esoum", answer: "mouse" },
-      { prompt: "hsuoe", answer: "house" },
-      { prompt: "noci", answer: "coin" },
-      { prompt: "kobo", answer: "book" },
-      { prompt: "llab", answer: "ball" },
-      { prompt: "riahc", answer: "chair" }
-    ]
-  },
-  {
-    id: "L4",
+    id: "U1-sort",
     icon: "📦",
-    title: "Sort & Sound (Tap-to-place / Drag)",
-    desc: "Tap a word, then tap the correct bucket. (Drag also works.)",
+    title: "Unit 1: Sort & Sound",
+    desc: "ar, ir, ur — Sort words into the correct bucket.",
     type: "sort",
     pointsPerQ: 8,
     rounds: [
       {
-        title: "Unit 2: ou vs ow",
+        title: "ar vs ir",
+        buckets: ["ar","ir"],
+        items: [
+          { word:"car", bucket:"ar" },
+          { word:"park", bucket:"ar" },
+          { word:"bird", bucket:"ir" },
+          { word:"girl", bucket:"ir" }
+        ]
+      },
+      {
+        title: "ur vs er/or",
+        buckets: ["ur","er/or"],
+        items: [
+          { word:"nurse", bucket:"ur" },
+          { word:"purple", bucket:"ur" },
+          { word:"teacher", bucket:"er/or" },
+          { word:"doctor", bucket:"er/or" }
+        ]
+      }
+    ]
+  },
+
+  // === UNIT 2: ou, ow, oi, oy, oo ===
+  {
+    id: "U2-mcq",
+    icon: "🕵️",
+    title: "Unit 2: Sound Detective",
+    desc: "ou, ow, oi, oy, oo — Pick the correct sound.",
+    type: "mcq",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "m__se → mouse", choices: ["ou","ow"], answer: "ou", word: "mouse" },
+      { prompt: "h__se → house", choices: ["ou","oo"], answer: "ou", word: "house" },
+      { prompt: "c__ → cow", choices: ["ow","ou"], answer: "ow", word: "cow" },
+      { prompt: "br__n → brown", choices: ["ow","ou"], answer: "ow", word: "brown" },
+      { prompt: "c__n → coin", choices: ["oi","oy"], answer: "oi", word: "coin" },
+      { prompt: "s__l → soil", choices: ["oi","oy"], answer: "oi", word: "soil" },
+      { prompt: "t__ → toy", choices: ["oy","oi"], answer: "oy", word: "toy" },
+      { prompt: "b__ → boy", choices: ["oy","ow"], answer: "oy", word: "boy" },
+      { prompt: "b__k → book", choices: ["oo","ou"], answer: "oo", word: "book" },
+      { prompt: "f__t → foot", choices: ["oo","ow"], answer: "oo", word: "foot" }
+    ]
+  },
+  {
+    id: "U2-spell",
+    icon: "🧱",
+    title: "Unit 2: Word Builder",
+    desc: "ou, ow, oi, oy, oo — Type the full word.",
+    type: "input",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "m__se", answer: "mouse", hint: "Use 'ou'", word: "mouse" },
+      { prompt: "h__se", answer: "house", hint: "Use 'ou'", word: "house" },
+      { prompt: "c__", answer: "cow", hint: "Use 'ow'", word: "cow" },
+      { prompt: "t__n", answer: "town", hint: "Use 'ow'", word: "town" },
+      { prompt: "c__n", answer: "coin", hint: "Use 'oi'", word: "coin" },
+      { prompt: "t__", answer: "toy", hint: "Use 'oy'", word: "toy" },
+      { prompt: "b__k", answer: "book", hint: "Use 'oo'", word: "book" },
+      { prompt: "f__t", answer: "foot", hint: "Use 'oo'", word: "foot" }
+    ]
+  },
+  {
+    id: "U2-sort",
+    icon: "📦",
+    title: "Unit 2: Sort & Sound",
+    desc: "ou vs ow, oi vs oy — Sort words into the correct bucket.",
+    type: "sort",
+    pointsPerQ: 8,
+    rounds: [
+      {
+        title: "ou vs ow",
         buckets: ["ou","ow"],
         items: [
           { word:"mouse", bucket:"ou" },
@@ -597,17 +646,137 @@ const levels = [
         ]
       },
       {
-        title: "Unit 3: au vs aw",
+        title: "oi vs oy",
+        buckets: ["oi","oy"],
+        items: [
+          { word:"coin", bucket:"oi" },
+          { word:"soil", bucket:"oi" },
+          { word:"toy", bucket:"oy" },
+          { word:"boy", bucket:"oy" }
+        ]
+      }
+    ]
+  },
+
+  // === UNIT 3: au, aw, all, wa, or/oar ===
+  {
+    id: "U3-mcq",
+    icon: "🕵️",
+    title: "Unit 3: Sound Detective",
+    desc: "au, aw, all, wa, or/oar — Pick the correct sound.",
+    type: "mcq",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "s__ce → sauce", choices: ["au","aw"], answer: "au", word: "sauce" },
+      { prompt: "Aug__t → August", choices: ["us","aw"], answer: "us", word: "August" },
+      { prompt: "dr__ → draw", choices: ["aw","au"], answer: "aw", word: "draw" },
+      { prompt: "pr__n → prawn", choices: ["aw","au"], answer: "aw", word: "prawn" },
+      { prompt: "b__l → ball", choices: ["all","al"], answer: "all", word: "ball" },
+      { prompt: "t__l → tall", choices: ["all","al"], answer: "all", word: "tall" },
+      { prompt: "w__ter → water", choices: ["a","al"], answer: "a", word: "water" },
+      { prompt: "w__k → walk", choices: ["al","aw"], answer: "al", word: "walk" },
+      { prompt: "h__se → horse", choices: ["or","oar"], answer: "or", word: "horse" },
+      { prompt: "r__r → roar", choices: ["oar","or"], answer: "oar", word: "roar" }
+    ]
+  },
+  {
+    id: "U3-spell",
+    icon: "🧱",
+    title: "Unit 3: Word Builder",
+    desc: "au, aw, all, wa, or/oar — Type the full word.",
+    type: "input",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "s__ce", answer: "sauce", hint: "Use 'au'", word: "sauce" },
+      { prompt: "dr__", answer: "draw", hint: "Use 'aw'", word: "draw" },
+      { prompt: "pr__n", answer: "prawn", hint: "Use 'aw'", word: "prawn" },
+      { prompt: "b__l", answer: "ball", hint: "Use 'all'", word: "ball" },
+      { prompt: "w__l", answer: "wall", hint: "Use 'all'", word: "wall" },
+      { prompt: "w__ter", answer: "water", hint: "Use 'wa'", word: "water" },
+      { prompt: "h__se", answer: "horse", hint: "Use 'or'", word: "horse" },
+      { prompt: "b__rd", answer: "board", hint: "Use 'oar'", word: "board" }
+    ]
+  },
+  {
+    id: "U3-sort",
+    icon: "📦",
+    title: "Unit 3: Sort & Sound",
+    desc: "au vs aw, or vs oar — Sort words into the correct bucket.",
+    type: "sort",
+    pointsPerQ: 8,
+    rounds: [
+      {
+        title: "au vs aw",
         buckets: ["au","aw"],
         items: [
-          { word:"August", bucket:"au" },
           { word:"sauce", bucket:"au" },
+          { word:"August", bucket:"au" },
           { word:"draw", bucket:"aw" },
           { word:"prawn", bucket:"aw" }
         ]
       },
       {
-        title: "Unit 4: air vs are",
+        title: "or vs oar",
+        buckets: ["or","oar"],
+        items: [
+          { word:"horse", bucket:"or" },
+          { word:"fork", bucket:"or" },
+          { word:"roar", bucket:"oar" },
+          { word:"board", bucket:"oar" }
+        ]
+      }
+    ]
+  },
+
+  // === UNIT 4: air, are, ea, ear/eer, bear/pear ===
+  {
+    id: "U4-mcq",
+    icon: "🕵️",
+    title: "Unit 4: Sound Detective",
+    desc: "air, are, ea, ear/eer — Pick the correct sound.",
+    type: "mcq",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "ch__r → chair", choices: ["air","are"], answer: "air", word: "chair" },
+      { prompt: "h__r → hair", choices: ["air","ear"], answer: "air", word: "hair" },
+      { prompt: "sh__e → share", choices: ["are","air"], answer: "are", word: "share" },
+      { prompt: "squ__e → square", choices: ["are","air"], answer: "are", word: "square" },
+      { prompt: "br__d → bread", choices: ["ea","ee"], answer: "ea", word: "bread" },
+      { prompt: "h__d → head", choices: ["ea","ee"], answer: "ea", word: "head" },
+      { prompt: "cl__r → clear", choices: ["ear","eer"], answer: "ear", word: "clear" },
+      { prompt: "ch__r → cheer", choices: ["eer","ear"], answer: "eer", word: "cheer" },
+      { prompt: "🐻 → bear", choices: ["ear (air)","ear"], answer: "ear (air)", word: "bear" },
+      { prompt: "🍐 → pear", choices: ["ear (air)","ear"], answer: "ear (air)", word: "pear" }
+    ]
+  },
+  {
+    id: "U4-spell",
+    icon: "🧱",
+    title: "Unit 4: Word Builder",
+    desc: "air, are, ea, ear/eer — Type the full word.",
+    type: "input",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "ch__r", answer: "chair", hint: "Use 'air'", word: "chair" },
+      { prompt: "h__r", answer: "hair", hint: "Use 'air'", word: "hair" },
+      { prompt: "sh__e", answer: "share", hint: "Use 'are'", word: "share" },
+      { prompt: "squ__e", answer: "square", hint: "Use 'are'", word: "square" },
+      { prompt: "br__d", answer: "bread", hint: "Use 'ea'", word: "bread" },
+      { prompt: "h__d", answer: "head", hint: "Use 'ea'", word: "head" },
+      { prompt: "cl__r", answer: "clear", hint: "Use 'ear'", word: "clear" },
+      { prompt: "ch__r", answer: "cheer", hint: "Use 'eer'", word: "cheer" }
+    ]
+  },
+  {
+    id: "U4-sort",
+    icon: "📦",
+    title: "Unit 4: Sort & Sound",
+    desc: "air vs are, ea vs ear/eer — Sort words into the correct bucket.",
+    type: "sort",
+    pointsPerQ: 8,
+    rounds: [
+      {
+        title: "air vs are",
         buckets: ["air","are"],
         items: [
           { word:"chair", bucket:"air" },
@@ -617,7 +786,7 @@ const levels = [
         ]
       },
       {
-        title: "Unit 4: ea vs ear/eer",
+        title: "ea vs ear/eer",
         buckets: ["ea","ear/eer"],
         items: [
           { word:"bread", bucket:"ea" },
@@ -628,11 +797,33 @@ const levels = [
       }
     ]
   },
+
+  // === BONUS: Mixed challenges ===
   {
-    id: "L5",
+    id: "B1-unscramble",
+    icon: "🔤",
+    title: "Bonus: Mix & Fix (All Units)",
+    desc: "Unscramble words from all 4 units!",
+    type: "unscramble",
+    pointsPerQ: 1,
+    questions: [
+      { prompt: "rca", answer: "car" },
+      { prompt: "mfra", answer: "farm" },
+      { prompt: "drib", answer: "bird" },
+      { prompt: "esoum", answer: "mouse" },
+      { prompt: "noci", answer: "coin" },
+      { prompt: "llab", answer: "ball" },
+      { prompt: "esroh", answer: "horse" },
+      { prompt: "riahc", answer: "chair" },
+      { prompt: "darbe", answer: "bread" },
+      { prompt: "eerch", answer: "cheer" }
+    ]
+  },
+  {
+    id: "B2-tricky",
     icon: "🎯",
-    title: "Tricky Twins (Choose the correct word)",
-    desc: "Pick the correct word. Listen carefully.",
+    title: "Bonus: Tricky Twins",
+    desc: "Pick the correct word. Listen carefully!",
     type: "mcq",
     pointsPerQ: 1,
     questions: [
@@ -640,21 +831,28 @@ const levels = [
       { prompt: "🚶  (walk / work)", choices:["walk","work"], answer:"walk", word:"walk" },
       { prompt: "🍐  (pear / pair)", choices:["pear","pair"], answer:"pear", word:"pear" },
       { prompt: "🪑  (chair / cheer)", choices:["chair","cheer"], answer:"chair", word:"chair" },
-      { prompt: "🦌  (deer / dear)", choices:["deer","dear"], answer:"deer", word:"deer" }
+      { prompt: "🦌  (deer / dear)", choices:["deer","dear"], answer:"deer", word:"deer" },
+      { prompt: "⭐  (star / stir)", choices:["star","stir"], answer:"star", word:"star" },
+      { prompt: "🌊  (board / bird)", choices:["board","bird"], answer:"board", word:"board" },
+      { prompt: "🐄  (cow / coin)", choices:["cow","coin"], answer:"cow", word:"cow" }
     ]
   },
   {
-    id: "L6",
+    id: "B3-sentence",
     icon: "✍️",
-    title: "Sentence Studio (Create your own!)",
-    desc: "Write a sentence. We check for the keyword only (easy!).",
+    title: "Bonus: Sentence Studio",
+    desc: "Write a sentence using the keyword.",
     type: "sentence",
     pointsPerQ: 2,
     questions: [
-      { prompt: "Write a sentence with: car", keyword: "car" },
-      { prompt: "Write a sentence with: mouse", keyword: "mouse" },
-      { prompt: "Write a sentence with: chair", keyword: "chair" },
-      { prompt: "Write a sentence with: bread", keyword: "bread" }
+      { prompt: "Write a sentence with: car (Unit 1)", keyword: "car" },
+      { prompt: "Write a sentence with: bird (Unit 1)", keyword: "bird" },
+      { prompt: "Write a sentence with: mouse (Unit 2)", keyword: "mouse" },
+      { prompt: "Write a sentence with: toy (Unit 2)", keyword: "toy" },
+      { prompt: "Write a sentence with: ball (Unit 3)", keyword: "ball" },
+      { prompt: "Write a sentence with: horse (Unit 3)", keyword: "horse" },
+      { prompt: "Write a sentence with: chair (Unit 4)", keyword: "chair" },
+      { prompt: "Write a sentence with: bread (Unit 4)", keyword: "bread" }
     ]
   }
 ];
