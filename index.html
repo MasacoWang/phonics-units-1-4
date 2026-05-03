@@ -434,33 +434,58 @@
 /* ============
    SPEECH (Text-to-Speech)
    ============ */
-function speak(text, btn){
+let voicesReady = false;
+let cachedVoice = null;
+
+function loadVoices(){
   if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utter = new SpeechSynthesisUtterance(text);
-  utter.lang = "en-GB";
-  utter.rate = 0.75;   // slow for kids
-  utter.pitch = 1.1;
-
-  // Try to pick a natural English voice
   const voices = speechSynthesis.getVoices();
-  const preferred = voices.find(v=> v.lang.startsWith("en") && v.name.toLowerCase().includes("female"))
-    || voices.find(v=> v.lang.startsWith("en-GB"))
-    || voices.find(v=> v.lang.startsWith("en"));
-  if(preferred) utter.voice = preferred;
-
-  if(btn){
-    btn.classList.add("speaking");
-    utter.onend = ()=> btn.classList.remove("speaking");
-    utter.onerror = ()=> btn.classList.remove("speaking");
+  if(voices.length > 0){
+    voicesReady = true;
+    // Pick best English voice
+    cachedVoice =
+      voices.find(v=> v.lang === "en-GB" && v.localService) ||
+      voices.find(v=> v.lang.startsWith("en-GB")) ||
+      voices.find(v=> v.lang.startsWith("en") && v.localService) ||
+      voices.find(v=> v.lang.startsWith("en")) ||
+      null;
   }
-  speechSynthesis.speak(utter);
 }
 
-// Preload voices (some browsers load them async)
+// Preload voices — browsers load them async
 if(window.speechSynthesis){
-  speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged = ()=> speechSynthesis.getVoices();
+  loadVoices();
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function speak(text, btn){
+  if(!window.speechSynthesis) return;
+
+  // Edge/Chrome bug: cancel + immediate speak can be silent
+  speechSynthesis.cancel();
+
+  // Small delay after cancel to avoid silent playback
+  setTimeout(()=>{
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = "en-GB";
+    utter.rate = 0.8;
+    utter.pitch = 1.1;
+    utter.volume = 1;
+
+    if(!voicesReady) loadVoices();
+    if(cachedVoice) utter.voice = cachedVoice;
+
+    if(btn){
+      btn.classList.add("speaking");
+      utter.onend = ()=> btn.classList.remove("speaking");
+      utter.onerror = ()=> btn.classList.remove("speaking");
+    }
+
+    speechSynthesis.speak(utter);
+
+    // Edge workaround: resume if paused by the browser
+    if(speechSynthesis.paused) speechSynthesis.resume();
+  }, 100);
 }
 
 // Helper: creates a 🔊 button that speaks the given word
