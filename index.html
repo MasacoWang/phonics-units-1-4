@@ -786,12 +786,30 @@ function finishLevel(levelId, earned, total){
   const status = earned === total ? "done" : "partial";
   state.done[levelId] = { status, earned, total };
   saveState();
+
+  // Find next level
+  const currentIdx = levels.findIndex(l => l.id === levelId);
+  const hasNext = currentIdx >= 0 && currentIdx < levels.length - 1;
+  const nextLvl = hasNext ? levels[currentIdx + 1] : null;
+
   stagePlay.insertAdjacentHTML("beforeend", `
-    <div class="toast ${status==='done'?'good':'info'}">
+    <div class="toast ${status==='done'?'good':'info'}" style="display:block;">
       ${status==='done' ? 'Level Complete! 🎉 Great job!' : 'Nice work! ⭐ You can retry anytime.'}
       (Earned ${earned}/${total})
     </div>
+    <div class="row" style="justify-content:center;margin-top:14px;gap:12px;">
+      <button class="primary" id="navNextLevel">${hasNext ? `▶ Next: ${nextLvl.icon} ${nextLvl.title}` : '🏠 All Levels'}</button>
+      ${hasNext ? '<button id="navAllLevels">🏠 All Levels</button>' : ''}
+    </div>
   `);
+
+  document.getElementById("navNextLevel").onclick = ()=>{
+    if(hasNext) startLevel(nextLvl.id);
+    else showHome();
+  };
+  if(hasNext){
+    document.getElementById("navAllLevels").onclick = showHome;
+  }
 }
 
 /* ============
