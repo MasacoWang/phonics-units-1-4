@@ -794,8 +794,9 @@ function renderReview(){
 
     unit.groups.forEach(group => {
       html += `<div style="margin:10px 0 6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <b style="color:#364fc7;font-size:16px;">${group.sound}</b>
-        <button class="sound-btn sound-phonics" data-phonics="${group.sound}" title="Listen to the '${group.sound}' sound" style="width:30px;height:30px;font-size:14px;">🔊</button>
+        <button class="chip sound-phonics" data-phonics="${group.sound}" title="Click to hear '${group.sound}'" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:linear-gradient(135deg,#e7f5ff,#d0ebff);border:2px solid #74c0fc;border-radius:999px;font-weight:900;font-size:16px;color:#1971c2;cursor:pointer;">
+          ${group.sound} <span style="font-size:14px;">🔊</span>
+        </button>
         <span style="color:#5a6472;font-size:12px;">— ${group.rule}</span>
       </div>`;
       html += `<div class="chip-row" data-sound-group="${group.sound}"></div>`;
