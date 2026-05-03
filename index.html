@@ -793,11 +793,24 @@ function renderReview(){
     let html = `<div class="qtitle" style="font-size:15px;margin-bottom:10px;">📚 ${unit.unit}</div>`;
 
     unit.groups.forEach(group => {
-      html += `<div style="margin:10px 0 6px;"><b style="color:#364fc7;font-size:14px;">${group.sound}</b> <span style="color:#5a6472;font-size:12px;">— ${group.rule}</span></div>`;
+      html += `<div style="margin:10px 0 6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <b style="color:#364fc7;font-size:16px;">${group.sound}</b>
+        <button class="sound-btn sound-phonics" data-phonics="${group.sound}" title="Listen to the '${group.sound}' sound" style="width:30px;height:30px;font-size:14px;">🔊</button>
+        <span style="color:#5a6472;font-size:12px;">— ${group.rule}</span>
+      </div>`;
       html += `<div class="chip-row" data-sound-group="${group.sound}"></div>`;
     });
 
     unitDiv.innerHTML = html;
+
+    // Add click handlers for phonics sound buttons
+    unitDiv.querySelectorAll(".sound-phonics").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const sound = btn.dataset.phonics;
+        speak(sound, btn);
+      });
+    });
 
     // Add sound buttons for each word
     unit.groups.forEach(group => {
